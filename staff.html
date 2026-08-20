@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal - Smart AI Prescription Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Elegant Theme */
+            --bg-primary: #0f0f12;
+            --bg-secondary: #1a1a1f;
+            --bg-card: #22222a;
+            --bg-elevated: #2a2a33;
+            --text-primary: #f0f0f4;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7a;
+            --accent: #7c3aed;
+            --accent-light: #8b5cf6;
+            --accent-glow: rgba(124, 58, 237, 0.2);
+            --accent-pale: #2d1b4e;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #2a2a33;
+            --border-light: #33333d;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* ── TOP NAV ── */
+        .nav {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px var(--accent-glow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .nav-icon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+        .nav-icon i { color: white; font-size: 18px; }
+        .nav-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .nav-badge {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 30px;
+            letter-spacing: .4px;
+            transition: all 0.3s ease;
+        }
+        .nav-badge:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+        }
+        .nav-badge i { color: var(--accent-light); margin-right: 6px; }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+            background: var(--accent-pale);
+            border-color: var(--border-light);
+        }
+
+        /* ── LAYOUT ── */
+        .shell {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* ── PROGRESS RIBBON ── */
+        .progress-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 40px;
+            background: var(--bg-secondary);
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+        }
+        .prog-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+        .prog-step:not(:last-child)::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: var(--border);
+            margin: 0 12px;
+            transition: background .4s;
+        }
+        .prog-step.done:not(:last-child)::after { background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+        .prog-dot {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .prog-step.active .prog-dot {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            box-shadow: 0 0 15px var(--accent-glow);
+            transform: scale(1.05);
+        }
+        .prog-step.done .prog-dot {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+        .prog-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+            transition: color 0.3s ease;
+        }
+        .prog-step.active .prog-label { color: var(--accent-light); }
+        .prog-step.done .prog-label { color: var(--success); }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 36px;
+            box-shadow: var(--shadow-sm);
+            animation: cardIn 0.4s ease both;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, var(--accent-pale), rgba(124, 58, 237, 0.2));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .card-icon:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+        }
+        .card-icon:hover i { color: white; }
+        .card-icon i { color: var(--accent-light); font-size: 22px; transition: color 0.3s ease; }
+        .card-head h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .card-head p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ── FORM ── */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+        .field { display: flex; flex-direction: column; gap: 8px; }
+        .field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: .3px;
+        }
+        .field label span { color: var(--accent-light); }
+
+        .field input, .field select {
+            height: 50px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 0 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .field input:focus, .field select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+            transform: translateY(-1px);
+        }
+        .field input:hover, .field select:hover {
+            border-color: var(--accent-light);
+        }
+        .field input::placeholder { color: var(--text-muted); }
+        .field select option { background: var(--bg-card); }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: .2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            box-shadow: 0 2px 10px var(--accent-glow);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+        .btn-primary:active { transform: translateY(0); }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            font-size: 15px;
+            padding: 14px 32px;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+        .btn-success:active { transform: translateY(0); }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+            background: var(--accent-pale);
+            transform: translateY(-2px);
+        }
+        .btn-outline:active { transform: translateY(0); }
+
+        .btn:disabled { opacity: 0.5; cursor: default; transform: none !important; }
+
+        /* ── UPLOAD ZONE ── */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            background: var(--bg-elevated);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .upload-zone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .upload-zone:hover::before {
+            left: 100%;
+        }
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--accent);
+            background: var(--accent-pale);
+            transform: translateY(-2px);
+        }
+        .upload-zone .up-icon {
+            width: 72px;
+            height: 72px;
+            background: var(--accent-pale);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .upload-zone:hover .up-icon { 
+            transform: translateY(-5px) scale(1.05);
+        }
+        .upload-zone .up-icon i { font-size: 30px; color: var(--accent-light); }
+        .upload-zone h3 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .upload-zone p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .upload-zone .up-formats {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 18px;
+        }
+        .fmt-tag {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            letter-spacing: .5px;
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover .fmt-tag {
+            border-color: var(--accent);
+            color: var(--accent-light);
+        }
+
+        /* ── PROCESSING BAR ── */
+        .ai-processing {
+            display: none;
+            margin-top: 24px;
+            background: var(--accent-pale);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px 24px;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ai-processing .ai-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        .spinner {
+            width: 22px;
+            height: 22px;
+            border: 2.5px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .ai-processing .ai-row span {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-light);
+        }
+        .ai-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .ai-bar-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 4px;
+            transition: width 0.4s ease;
+            animation: shimmer 1.5s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%   { width: 10%; opacity: 0.7; }
+            50%  { width: 85%; opacity: 1; }
+            100% { width: 95%; opacity: 0.8; }
+        }
+
+        /* ── SUCCESS BANNER ── */
+        .success-banner {
+            display: none;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 14px 20px;
+            color: var(--success);
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 20px;
+            animation: slideIn 0.3s ease;
+        }
+
+        /* ── MEDICINE LIST ── */
+        .med-list { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+        .med-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideIn 0.3s ease both;
+        }
+        .med-row:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+            box-shadow: var(--shadow-sm);
+        }
+        .med-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: var(--accent-pale);
+            color: var(--accent-light);
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .med-row:hover .med-num {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+        }
+        .med-info { flex: 1; }
+        .med-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+        .med-row:hover .med-name {
+            color: var(--accent-light);
+        }
+        .med-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .med-pattern {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .8px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .med-row:hover .med-pattern {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* ── IMAGE UPLOAD CARDS ── */
+        .img-upload-card {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            background: var(--bg-elevated);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideIn 0.3s ease both;
+        }
+        .img-upload-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        .img-card-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .img-med-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--accent-pale);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .img-upload-card:hover .img-med-icon {
+            transform: scale(1.05);
+            background: var(--accent);
+        }
+        .img-upload-card:hover .img-med-icon i { color: white; }
+        .img-med-icon i { color: var(--accent-light); font-size: 20px; transition: color 0.3s ease; }
+        .img-med-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+        .img-upload-card:hover .img-med-name {
+            color: var(--accent-light);
+        }
+        .img-med-inst {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .upload-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-light);
+            background: var(--accent-pale);
+            border: 1px solid var(--border);
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .upload-trigger::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .upload-trigger:active::before {
+            width: 200px;
+            height: 200px;
+        }
+        .upload-trigger:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        .preview-wrap {
+            margin-top: 14px;
+            display: none;
+        }
+        .preview-wrap.show {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+        .preview-wrap img {
+            width: 72px;
+            height: 72px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            transition: transform 0.3s ease;
+        }
+        .preview-wrap img:hover {
+            transform: scale(1.05);
+        }
+        .preview-ok {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* ── STEP SECTIONS ── */
+        .step-section { display: none; }
+        .step-section.show { display: block; animation: cardIn 0.4s ease; }
+
+        /* ── ALERT TOAST ── */
+        .toast-wrap {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .toast-item {
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 280px;
+            box-shadow: var(--shadow-md);
+            animation: slideRight 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        @keyframes slideRight {
+            from { transform: translateX(80px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .toast-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .toast-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .toast-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 28px 0;
+        }
+
+        /* ── CTA BOTTOM ── */
+        .cta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .cta-hint {
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+        .cta-hint:hover {
+            color: var(--accent-light);
+        }
+        .cta-hint i { color: var(--accent-light); margin-right: 6px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-light);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="/" class="nav-brand">
+        <div class="nav-icon"><i class="fas fa-robot"></i></div>
+        <span class="nav-title">Smart AI Prescription Assistant</span>
+    </a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/staff" class="nav-link active">Staff Portal</a>
+        <span class="nav-badge"><i class="fas fa-user-md"></i>&nbsp; Staff Portal</span>
+    </div>
+</nav>
+
+<div class="shell">
+
+    <!-- PROGRESS -->
+    <div class="progress-track" id="progressTrack">
+        <div class="prog-step active" id="pstep1">
+            <div class="prog-dot" id="pdot1">1</div>
+            <span class="prog-label">Register</span>
+        </div>
+        <div class="prog-step" id="pstep2">
+            <div class="prog-dot" id="pdot2">2</div>
+            <span class="prog-label">Prescription</span>
+        </div>
+        <div class="prog-step" id="pstep3">
+            <div class="prog-dot" id="pdot3">3</div>
+            <span class="prog-label">Medicine Images</span>
+        </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="step1" class="step-section show">
+        <div class="card">
+            <div class="card-head">
+                <div class="card-icon"><i class="fas fa-user-plus"></i></div>
+                <div>
+                    <h2>Register Patient</h2>
+                    <p>Create a new patient record and choose their preferred language</p>
+                </div>
+            </div>
+
+            <form id="patientInfoForm">
+                <div class="form-row">
+                    <div class="field">
+                        <label for="patientName">Full Name <span>*</span></label>
+                        <input type="text" id="patientName" placeholder="e.g. Ravi Kumar" required>
+                    </div>
+                    <div class="field">
+                        <label for="localLanguage">Preferred Language <span>*</span></label>
+                        <select id="localLanguage" required>
+                            <option value="">Select language…</option>
+                            <option value="english">English</option>
+                            <option value="hindi">हिंदी — Hindi</option>
+                            <option value="kannada">ಕನ್ನಡ — Kannada</option>
+                            <option value="telugu">తెలుగు — Telugu</option>
+                            <option value="tamil">தமிழ் — Tamil</option>
+                            <option value="bengali">বাংলা — Bengali</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top:28px;">
+                    <button type="submit" class="btn btn-primary" id="registerBtn">
+                        <i class="fas fa-arrow-right"></i> Register & Continue
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="step2" class="step-section">
+        <div class="card">
+            <div class="card-head">
+                <div class="card-icon"><i class="fas fa-file-prescription"></i></div>
+                <div>
+                    <h2>Upload Prescription</h2>
+                    <p>AI will extract all medicines and dosage patterns automatically</p>
+                </div>
+            </div>
+
+            <div class="upload-zone" id="prescriptionUploadArea">
+                <div class="up-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <h3>Click or drag &amp; drop the prescription image</h3>
+                <p>Clear photo of the prescription (handwritten or printed)</p>
+                <div class="up-formats">
+                    <span class="fmt-tag">JPG</span>
+                    <span class="fmt-tag">PNG</span>
+                    <span class="fmt-tag">JPEG</span>
+                    <span class="fmt-tag">WEBP</span>
+                </div>
+                <input type="file" id="prescriptionFile" accept="image/*" style="display:none">
+            </div>
+
+            <div class="ai-processing" id="ocrProgress">
+                <div class="ai-row">
+                    <div class="spinner"></div>
+                    <span>AI is analyzing the prescription…</span>
+                </div>
+                <div class="ai-bar"><div class="ai-bar-fill"></div></div>
+            </div>
+
+            <div class="success-banner" id="extractSuccess">
+                <i class="fas fa-check-circle"></i>&nbsp; Medicines extracted successfully!
+            </div>
+
+            <div id="ocrResult" style="display:none; margin-top:24px;">
+                <p style="font-size:12px; font-weight:600; color:var(--text-muted); letter-spacing:.5px; margin-bottom:12px;">
+                    <i class="fas fa-capsules"></i> DETECTED MEDICINES
+                </p>
+                <div class="med-list" id="medicinesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step3" class="step-section">
+        <div class="card">
+            <div class="card-head">
+                <div class="card-icon"><i class="fas fa-camera-retro"></i></div>
+                <div>
+                    <h2>Add Medicine Photos</h2>
+                    <p>Optional — helps patients identify their medicines visually</p>
+                </div>
+            </div>
+
+            <div id="medicineImageUploads" style="display:flex;flex-direction:column;gap:16px;"></div>
+
+            <div class="divider"></div>
+            <div class="cta-row">
+                <span class="cta-hint"><i class="fas fa-info-circle"></i> You can skip this step — photos can be added later</span>
+                <button class="btn btn-success" onclick="completeProcess()">
+                    <i class="fas fa-external-link-alt"></i> Open Patient Portal
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+    let currentPatientId = null;
+    let medicines = [];
+
+    function escapeHtml(t) {
+        if (!t) return '';
+        const d = document.createElement('div');
+        d.textContent = t; return d.innerHTML;
+    }
+
+    function showToast(msg, type = 'success') {
+        const wrap = document.getElementById('toastWrap');
+        const icons = { success: 'fa-check-circle', danger: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle' };
+        const t = document.createElement('div');
+        t.className = `toast-item toast-${type}`;
+        t.innerHTML = `<i class="fas ${icons[type]}"></i> ${escapeHtml(msg)}`;
+        wrap.appendChild(t);
+        setTimeout(() => t.style.opacity = '0', 4200);
+        setTimeout(() => t.remove(), 4700);
+    }
+
+    function setStep(n) {
+        [1,2,3].forEach(i => {
+            document.getElementById('step'+i).classList.remove('show');
+            const ps = document.getElementById('pstep'+i);
+            ps.classList.remove('active','done');
+            if (i < n) ps.classList.add('done');
+            if (i === n) ps.classList.add('active');
+        });
+        document.getElementById('step'+n).classList.add('show');
+    }
+
+    // STEP 1
+    document.getElementById('patientInfoForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const name = document.getElementById('patientName').value.trim();
+        const lang = document.getElementById('localLanguage').value;
+        if (!name || !lang) { showToast('Please fill all fields', 'warning'); return; }
+
+        const btn = document.getElementById('registerBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering…';
+
+        try {
+            const res = await fetch('/api/create_patient', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, local_language: lang })
+            });
+            const data = await res.json();
+            if (data.success) {
+                currentPatientId = data.patient_id;
+                showToast(`Patient "${name}" registered successfully!`, 'success');
+                setStep(2);
+            } else {
+                showToast(data.error || 'Registration failed', 'danger');
+            }
+        } catch(err) {
+            showToast('Network error: ' + err.message, 'danger');
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-arrow-right"></i> Register & Continue';
+    });
+
+    // STEP 2 — Drag & drop
+    const uploadArea = document.getElementById('prescriptionUploadArea');
+    const fileInput  = document.getElementById('prescriptionFile');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+    uploadArea.addEventListener('drop', async e => {
+        e.preventDefault(); uploadArea.classList.remove('dragover');
+        if (e.dataTransfer.files[0]) await uploadPrescription(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', async e => {
+        if (e.target.files[0]) await uploadPrescription(e.target.files[0]);
+    });
+
+    async function uploadPrescription(file) {
+        const fd = new FormData();
+        fd.append('prescription', file);
+        fd.append('patient_id', currentPatientId);
+
+        document.getElementById('ocrProgress').style.display = 'block';
+        document.getElementById('extractSuccess').style.display = 'none';
+        document.getElementById('ocrResult').style.display = 'none';
+
+        try {
+            const res  = await fetch('/api/upload_prescription', { method: 'POST', body: fd });
+            const data = await res.json();
+            document.getElementById('ocrProgress').style.display = 'none';
+
+            if (data.success) {
+                medicines = data.medicines;
+                document.getElementById('extractSuccess').style.display = 'flex';
+                renderMedicineList(data.medicines);
+                document.getElementById('ocrResult').style.display = 'block';
+                setupImageUploads(data.medicines);
+                setStep(3);
+                showToast('Prescription processed successfully!', 'success');
+            } else {
+                showToast(data.error || 'Processing failed', 'danger');
+            }
+        } catch(err) {
+            document.getElementById('ocrProgress').style.display = 'none';
+            showToast('Error: ' + err.message, 'danger');
+        }
+    }
+
+    function renderMedicineList(meds) {
+        const c = document.getElementById('medicinesList');
+        c.innerHTML = '';
+        meds.forEach((m, i) => {
+            const el = document.createElement('div');
+            el.className = 'med-row';
+            el.style.animationDelay = `${i * 0.05}s`;
+            el.innerHTML = `
+                <div class="med-num">${i+1}</div>
+                <div class="med-info">
+                    <div class="med-name">${escapeHtml(m.name)}</div>
+                    <div class="med-sub"><i class="fas fa-clock"></i> ${escapeHtml(m.instruction || 'As directed')}</div>
+                </div>
+                <span class="med-pattern">${escapeHtml(m.timing_pattern || '—')}</span>
+            `;
+            c.appendChild(el);
+        });
+    }
+
+    function setupImageUploads(meds) {
+        const c = document.getElementById('medicineImageUploads');
+        c.innerHTML = '';
+        meds.forEach((m, i) => {
+            const fid = `mf_${m.id}`, pid = `mp_${m.id}`;
+            const el = document.createElement('div');
+            el.className = 'img-upload-card';
+            el.id = `mc_${m.id}`;
+            el.style.animationDelay = `${i * 0.07}s`;
+            el.innerHTML = `
+                <div class="img-card-top">
+                    <div class="img-med-icon"><i class="fas fa-capsules"></i></div>
+                    <div>
+                        <div class="img-med-name">${escapeHtml(m.name)}</div>
+                        <div class="img-med-inst"><i class="fas fa-info-circle"></i> ${escapeHtml(m.instruction || 'As directed')}</div>
+                    </div>
+                </div>
+                <label class="upload-trigger" onclick="document.getElementById('${fid}').click()">
+                    <i class="fas fa-camera"></i> Upload Photo
+                </label>
+                <input type="file" id="${fid}" style="display:none" accept="image/*"
+                       onchange="uploadMedImage(this.files[0], ${m.id}, '${pid}')">
+                <div class="preview-wrap" id="${pid}"></div>
+            `;
+            c.appendChild(el);
+        });
+    }
+
+    async function uploadMedImage(file, medId, previewId) {
+        if (!file) return;
+        const fd = new FormData();
+        fd.append('medicine_image', file);
+        fd.append('medicine_id', medId);
+        const pw = document.getElementById(previewId);
+        pw.className = 'preview-wrap show';
+        pw.innerHTML = '<div class="spinner"></div><span style="font-size:13px;color:var(--text-muted)">Uploading…</span>';
+
+        try {
+            const res  = await fetch('/api/upload_medicine_image', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (data.success) {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    pw.innerHTML = `
+                        <img src="${ev.target.result}" alt="medicine">
+                        <span class="preview-ok"><i class="fas fa-check-circle"></i> Uploaded!</span>
+                    `;
+                };
+                reader.readAsDataURL(file);
+                showToast(`Image uploaded for medicine`, 'success');
+            } else {
+                pw.innerHTML = `<span style="color:var(--warning);font-size:13px;font-weight:600"><i class="fas fa-times-circle"></i> ${escapeHtml(data.error || 'Upload failed')}</span>`;
+            }
+        } catch(err) {
+            pw.innerHTML = `<span style="color:var(--warning);font-size:13px;font-weight:600"><i class="fas fa-times-circle"></i> Error uploading</span>`;
+        }
+    }
+
+    function completeProcess() {
+        if (!currentPatientId) { showToast('No patient registered yet', 'warning'); return; }
+        window.open(`/patient/${currentPatientId}`, '_blank');
+    }
+</script>
+</body>
+</html>
